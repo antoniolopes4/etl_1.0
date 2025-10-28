@@ -1,0 +1,35 @@
+{
+  "DRR": {
+    "type": "ftp",
+    "path": "\\\\bai1\\MFTS\\rec\\sw4\\ba",
+    "format": "xml",
+    "target_table": "TMP_DRR4",
+    "transform": "transactions_transform",
+    "columns": ["DataTransacao", "ContaOrigem", "ContaDestino", "Valor"]
+  },
+  "SAS_AML": {
+    "type": "database",
+    "connection": "sqlserver_aml",
+    "query": "SELECT DataOperacao, Valor, TipoOperacao, Conta FROM aml_transactions",
+    "target_table": "TMP_AML",
+    "transform": "aml_transform",
+    "columns": ["DataOperacao", "Valor", "TipoOperacao", "Conta"]
+  },
+  "PRECARIO": {
+    "type": "csv",
+    "path": "data/",
+    "target_table": "DW_PRECARIOS",
+    "transform": "pricing_transform",
+    "columns": ["id_produto", "nome", "preco"]
+  },
+  "API_TRANSACOES": {
+    "type": "api",
+    "base_url": "https://jsonplaceholder.typicode.com/posts",
+    "pagination_key": "page",
+    "params": {"limit": 100},
+    "max_pages": 5,
+    "columns": ["userId", "id", "title"],
+    "target_table": "TMP_TRANSACOES",
+    "transform": "transactions_transform"
+  }
+}

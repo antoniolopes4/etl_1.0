@@ -1,0 +1,6 @@
+base_dir: "D:/All/Emis_DRR_FileExtractionProcess"
+staging_dir: "data/staging"
+loaded_dir: "data/loaded"
+log_dir: "logs"
+default_date_format: "%Y%m%d"
+timezone: "Africa/Luanda"

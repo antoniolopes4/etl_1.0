@@ -1,0 +1,16 @@
+{
+  "sqlserver_aml": {
+    "driver": "ODBC Driver 17 for SQL Server",
+    "server": "sql-bai-aml",
+    "database": "DB_AML",
+    "user_env": "DB_AML_USER",
+    "password_env": "DB_AML_PASSWORD"
+  },
+  "sqlserver_dwh": {
+    "driver": "ODBC Driver 17 for SQL Server",
+    "server": "sql-bai-dwh",
+    "database": "DW_BAI",
+    "user_env": "DB_DWH_USER",
+    "password_env": "DB_DWH_PASSWORD"
+  }
+}
