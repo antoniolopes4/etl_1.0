@@ -1,0 +1,8 @@
+pandas
+sqlalchemy
+pyodbc
+requests
+pyyaml
+pytest
+loguru
+python-dotenv
