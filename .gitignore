@@ -17,12 +17,16 @@ dist/
 
 # Pytest
 .cache/
+.pytest_cache/
 
-# VSCode
+# VSCode / PyCharm
 .vscode/
+.idea/
+*.iml
 
 # macOS
 .DS_Store
+Thumbs.db
 
 # Logs
 logs/

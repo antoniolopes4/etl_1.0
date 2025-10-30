@@ -1,0 +1,117 @@
+{
+  "DRR": {
+    "type": "ftp",
+    "path": "\\\\bai1\\MFTS\\rec\\sw4\\ba",
+    "format": "xml",
+    "target_table": "TMP_DRR4",
+    "transform": "transactions_transform",
+    "columns": [
+      "DataTransacao",
+      "ContaOrigem",
+      "ContaDestino",
+      "Valor"
+    ],
+    "cleaning_rules": {
+      "normalize_columns": true,
+      "normalize_dates": ["DataTransacao"],
+      "drop_duplicates": ["ContaOrigem", "ContaDestino", "Valor"]
+    }
+  },
+  "SAS_AML": {
+    "type": "database",
+    "connection": "sqlserver_aml",
+    "query": "SELECT * FROM TMP_DRR4 WHERE ID_TEMPO = :id_tempo",
+    "target_table": "TMP_AML",
+    "transform": "aml_transform",
+    "incremental_key": "ID_TEMPO",
+    "columns": [
+      "ID_TEMPO",
+      "TransactionID",
+      "TransactionGenerationDate",
+      "ContractNumber"
+    ],
+    "cleaning_rules": {
+      "normalize_columns": true,
+      "normalize_dates": ["TransactionGenerationDate"],
+      "drop_duplicates": ["TransactionID"],
+      "fill_missing": {
+        "ContractNumber": "N/A"
+      }
+    },
+    "calculations": {
+      "generate_id_tempo": true,
+      "offset_days": 1,
+      "substring": [
+        { "col": "ContractNumber", "start": 0, "end": 5, "new_col": "ContractPrefix" }
+      ],
+      "aggregations": [
+        {
+          "group_by": ["ID_TEMPO"],
+          "agg": { "TransactionID": "count", "Valor": "sum" }
+        }
+      ]
+    },
+    "dimensional_model": {
+      "fact_table": "Fact_AML",
+      "grain": "1 linha por transação",
+      "dimensions": {
+        "Tempo": {
+          "keys": ["ID_TEMPO"],
+          "attributes": {
+            "Ano": "INT",
+            "Mes": "INT",
+            "Dia": "INT"
+          },
+          "scd_type": 2
+        },
+        "Cliente": {
+          "keys": ["ContractPrefix"],
+          "attributes": {
+            "ContractNumber": "NVARCHAR(50)"
+          },
+          "scd_type": 2
+        }
+      },
+      "facts": {
+        "Valor": "DECIMAL(18,2)",
+        "TransactionCount": "INT"
+      }
+    }
+  },
+  "PRECARIO": {
+    "type": "csv",
+    "path": "data/",
+    "target_table": "DW_PRECARIOS",
+    "transform": "pricing_transform",
+    "columns": [
+      "id_produto",
+      "nome",
+      "preco"
+    ],
+    "cleaning_rules": {
+      "normalize_columns": true
+    }
+  },
+  "API_TRANSACOES": {
+    "type": "api",
+    "base_url": "https://jsonplaceholder.typicode.com/posts",
+    "pagination_key": "page",
+    "params": {
+      "limit": 100
+    },
+    "max_pages": 5,
+    "columns": [
+      "userId",
+      "id",
+      "title"
+    ],
+    "target_table": "TMP_TRANSACOES",
+    "transform": "transactions_transform",
+    "cleaning_rules": {
+      "normalize_columns": true,
+      "drop_duplicates": ["id"],
+
+
+    }
+  }
+}

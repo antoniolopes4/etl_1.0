@@ -1,17 +1,17 @@
-import os
 import json
+import os
 import yaml
 from dotenv import load_dotenv
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 CONFIG_DIR = os.path.join(BASE_DIR, "config")
 
-# Carregar variáveis do .env
 load_dotenv(dotenv_path=os.path.join(BASE_DIR, ".env"), override=True)
 
 
 def load_json(file_name: str):
     """Carrega ficheiro JSON do diretório config/"""
+    print(CONFIG_DIR, file_name)
     path = os.path.join(CONFIG_DIR, file_name)
     if not os.path.exists(path):
         raise FileNotFoundError(f"Config file not found: {file_name}")

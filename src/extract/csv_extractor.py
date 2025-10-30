@@ -1,9 +1,10 @@
-import os
 import glob
+import os
+from typing import Optional, List, Dict
+
 import chardet
 import pandas as pd
 from loguru import logger
-from typing import Optional, List, Dict
 
 
 def detect_encoding(file_path: str, n_bytes: int = 10000) -> str:
@@ -36,7 +37,7 @@ def read_csv_file(file_path: str, schema: Optional[Dict[str, str]] = None) -> pd
     return df
 
 
-def extract(path: str, pattern: str = "*.csv", schema: Optional[Dict[str, str]] = None,
+def extract_csv(path: str, pattern: str = "*.csv", schema: Optional[Dict[str, str]] = None,
             deduplicate: bool = True, save_sample: bool = False,
             columns: Optional[List[str]] = None) -> pd.DataFrame:
     """
@@ -58,7 +59,7 @@ def extract(path: str, pattern: str = "*.csv", schema: Optional[Dict[str, str]] 
         df = read_csv_file(file, schema)
         df['__source_file'] = os.path.basename(file)
 
-        # 🔹 Filtra as colunas se definido
+        # Filtra as colunas se definido
         if columns:
             missing = [c for c in columns if c not in df.columns]
             if missing:

@@ -1,8 +1,9 @@
-import requests
-import pandas as pd
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
-from loguru import logger
 from typing import Optional, Dict, Any, List, Union
+
+import pandas as pd
+import requests
+from loguru import logger
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
 
 
 # ---------------- Retry configuration ----------------
@@ -93,7 +94,7 @@ def extract_api(
             logger.error(f"Erro na página {page}: {e}")
             break
 
-        logger.info(f"✅ Página {page} processada ({len(df)} registos).")
+        logger.info(f"Página {page} processada ({len(df)} registos).")
 
         # Decide se deve parar
         if not pagination_key:
